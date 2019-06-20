@@ -3,7 +3,8 @@
 
 使用规则说明
 
-运行 node  xiaoshoujiqiao.js
+终端运行 
+node  xiaoshoujiqiao
 
 
 本工具支持mysql 保存
