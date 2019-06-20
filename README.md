@@ -4,9 +4,12 @@
 ##### 使用规则说明
 
 ###### 终端运行 
-node  xiaoshoujiqiao
+
+>>node  xiaoshoujiqiao
 
 ######生成文本文件
+
+
 ```
  //文本文件
     let htmlArry = arcList.map((item,key) => {
