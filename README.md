@@ -3,6 +3,9 @@
 
 使用规则说明
 
+运行 node  xiaoshoujiqiao.js
+
+
 本工具支持mysql 保存
 具体配置文件：config.js
 
