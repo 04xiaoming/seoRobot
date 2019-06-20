@@ -26,6 +26,21 @@
 
     return false;
 ```
+###### 生成html文件
+```
+ let htmlArry2 = arcList.map((item,key) => {
+        return 'NO.第'+key + '<br>' + item.title + '<br>' + item.content + '<br><br>';
+    });
+    fs.writeFile('./' + bigclass + dateTime + '.html', htmlArry2, {
+        'flag': 'a'
+    }, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('--------------------------html文件----------------------------');
+    });
+```
+
 
 ###### 生成json文件
 
