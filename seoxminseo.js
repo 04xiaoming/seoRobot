@@ -8,9 +8,9 @@ var charset = require("superagent-charset"); //gbk编码
 var agent = require("superagent"); //gbk编码
 var fs = require('fs');
 var dateTime = new Date().getTime();
-//var url = "https://www.xminseo.com/page/";
-var url = "https://www.xminseo.com/category/seohexin/page/"; //seo技术
-var bigclass = "seo优化教程-seo技术";
+var url = "https://www.xminseo.com/page/";
+//var url = "https://www.xminseo.com/category/seohexin/page/"; //seo技术
+var bigclass = "seo优化教程";
 var contentInfo = ".article-content"; // 内容页面必须是唯一的
 var listTitle = ".excerpt h2 a"; //列表页获取title
 
@@ -18,7 +18,7 @@ var utfCharset = 'UTF-8'; //页面字符集
 var arcList = [];
 charset(agent); //
 var i = 2;
-var curPage = 23;
+var curPage = 40;
 
 function nextPage() {
 
@@ -39,17 +39,17 @@ function productHtml() {
     });
 
     let htmlLeft = arcList.map((item, key) => {
-        return 'NO.第<a href=#' + key + '>' + key + item.title + '</a><br>';
+        return '第<a href=#' + key + '>' + key + '--' + item.title + '</a><br>';
     });
 
-    let indexHtml = "<div class=content><div style='position:fixed; width:230px; border-right:3px solid #999; height:800px; overflow-y:scroll;' >" + htmlLeft + "</div><div style=margin-left:300>" + htmlArry2 + "</div></div>";
+    let indexHtml = "<div class=content><div style='position:fixed; width:260px; border-right:3px solid #999; height:800px; overflow-y:scroll;' >" + htmlLeft + "</div><div style=margin-left:300>" + htmlArry2 + "</div></div>";
     fs.writeFile('./' + bigclass + dateTime + '.html', indexHtml, {
         'flag': 'a'
     }, function(err) {
         if (err) {
             console.log(err);
         }
-        console.log('--------------------------生产html----------------------------');
+        console.log('------------------生产' + bigclass + dateTime + '.html完成----------------------------');
     });
 }
 
@@ -95,9 +95,7 @@ function filterHtml(html) {
                 content = content.split("来源：")[0]; //去掉来源
                 content = content.split("更多相关阅读推荐：")[0]; //更多相关阅读推荐
                 content = content.replace(/网贷ABC|嘉丰瑞德/g, "宜信财富");
-                console.log(content);
-
-
+                //console.log(content);
                 arcList.push({
                     title: title,
                     url: url.split("-")[1],
