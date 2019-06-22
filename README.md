@@ -9,9 +9,12 @@
 
 
 ###### 正则过滤规则
->>content = content.replace(/(https?.*?\.(:?html\b)(?!\.))/g, '');  //过滤url 类似https://www.35ui.cn/14436.html
->>content = content.replace(/(https?.*?\.(:?cn\b|com\b|net\b|org\b|gov\b)(?!\.))/g, '');//过滤url 类似https://www.35ui.cn
->>content = content.replace(/(<br>){2,6}/g, "<br>");  //替换多个<br>
+```
+content.replace(/(https?.*?\.(:?html\b)(?!\.))/g, '');  //过滤url 类似https://www.35ui.cn/14436.html
+content.replace(/(https?.*?\.(:?cn\b|com\b|net\b|org\b|gov\b)(?!\.))/g, '');//过滤url 类似https://www.35ui.cn
+content.replace(/(<br>){2,6}/g, "<br>");  //替换多个<br>
+content.replace(/<[^>]+>/g,"<br>");  //过滤掉所有的html标签
+```
 
 ###### 生成文本文件
 
