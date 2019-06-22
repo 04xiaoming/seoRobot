@@ -88,7 +88,7 @@ function filterHtml(html) {
              
                 var $ = res.text ? cheerio.load(res.text) : "";
                 var content = $(contentInfo).text(); //文章页面的内容必须是唯一的
-                content = content.replace(/<[^>]+>/g,"<br>");  //过滤掉说有的html标签
+                content = content.replace(/<[^>]+>/g,"<br>");  //过滤掉所有的html标签
                 content = content.replace(/(https?.*?\.(:?html\b)(?!\.))/g, '');  //过滤url 类似https://www.xminseo.com/14436.html
                 content = content.replace(/(https?.*?\.(:?cn\b|com\b|net\b|org\b|gov\b)(?!\.))/g, '');//过滤url 类似https://www.xminseo.com
                 content = content.replace(/当前位置：seo教程 »|SEO优化技术 »|大杂烩 »|本文地址：|最后编辑于： /g, "");
