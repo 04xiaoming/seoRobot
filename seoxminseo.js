@@ -42,7 +42,7 @@ function productHtml() {
         return '第<a href=#' + key + '>' + key + '--' + item.title + '</a><br>';
     });
 
-    let indexHtml = "<div class=content><div style='position:fixed; width:260px; border-right:3px solid #999; height:800px; overflow-y:scroll;' >" + htmlLeft + "</div><div style=margin-left:300>" + htmlArry2 + "</div></div>";
+    let indexHtml = "<div class=content><div style='position:fixed; width:260px; border-right:3px solid #999; height:100%; overflow-y:scroll;' >" + htmlLeft + "</div><div style=margin-left:300>" + htmlArry2 + "</div></div>";
     fs.writeFile('./' + bigclass + dateTime + '.html', indexHtml, {
         'flag': 'a'
     }, function(err) {
@@ -85,16 +85,21 @@ function filterHtml(html) {
         agent.get(url).charset(utfCharset).end(function(err, res) {
 
             if (res) {
-
+             
                 var $ = res.text ? cheerio.load(res.text) : "";
                 var content = $(contentInfo).text(); //文章页面的内容必须是唯一的
-                content = content.replace(/信息均来源互联网,不代表黄金之家观点立场，若侵权请联系本站编辑。|家庭理财网小编就暂且先推荐以上几个，希望对大家有用处/g, "");
+                content = content.replace(/<[^>]+>/g,"<br>");  //过滤掉说有的html标签
+                content = content.replace(/(https?.*?\.(:?html\b)(?!\.))/g, '');  //过滤url 类似https://www.xminseo.com/14436.html
+                content = content.replace(/(https?.*?\.(:?cn\b|com\b|net\b|org\b|gov\b)(?!\.))/g, '');//过滤url 类似https://www.xminseo.com
+                content = content.replace(/当前位置：seo教程 »|SEO优化技术 »|大杂烩 »|本文地址：|最后编辑于： /g, "");
                 content = content.replace(/\n|\r|\t/g, "<br>");
-                content = content.replace(/<br><br><br>/g, "<br>");
-                content = content.replace(/<br>{2,6}/g, " ");
+                content = content.replace(/(<br>){2,6}/g, "<br>");
                 content = content.split("来源：")[0]; //去掉来源
                 content = content.split("更多相关阅读推荐：")[0]; //更多相关阅读推荐
                 content = content.replace(/网贷ABC|嘉丰瑞德/g, "宜信财富");
+                
+                
+                
                 //console.log(content);
                 arcList.push({
                     title: title,
