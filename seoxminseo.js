@@ -17,14 +17,12 @@ var listTitle = ".excerpt h2 a"; //列表页获取title
 var utfCharset = 'UTF-8'; //页面字符集
 var arcList = [];
 charset(agent); //
-var i = 2;
-var curPage = 40;
+var i = 2,
+curPage = 40;
 
-function nextPage() {
-
+let nextPage=()=> {
     if (curPage >= i) {
-
-        var nextUrl = url + i; //页码
+        let nextUrl = url + i; //页码
         ++i;
         crawler(nextUrl);
         console.log(nextUrl);
@@ -33,19 +31,24 @@ function nextPage() {
     }
 }
 
-function productHtml() {
+let productHtml=()=> {
     let htmlArry2 = arcList.map((item, key) => {
-        return 'NO.第' + key + '<br><div id=' + key + '><h2>' + item.title + '</h2><br>' + item.content + '</div><br><br>';
+        return 'NO.第' + key + '<br><div id=' + key + '><h2>' + item.title + '</h2><div class="rightContent">' + item.content + '</div><br><br>';
     });
 
     let htmlLeft = arcList.map((item, key) => {
-        return '第<a href=#' + key + '>' + key + '--' + item.title + '</a><br>';
+        return '<a href=#' + key + '>第' + key + '--' + item.title + '</a><br>';
     });
 
-    let indexHtml = "<div class=content><div style='position:fixed; width:260px; border-right:3px solid #999; height:100%; overflow-y:scroll;' >" + htmlLeft + "</div><div style=margin-left:300>" + htmlArry2 + "</div></div>";
+    let indexHtml = "<html><head><meta charset='utf-8'>"
+    +"<title>【北京seo教程】北京seo外包公司,北京seo优化教程_靠谱北京seo优化外包团队</title>"
+    +"<meta name='keywords' content='北京seo教程,北京seo,北京seo优化,北京seo优化外包公司'>"
+    +"<meta name='description' content='北京seo教程_靠谱北京seo优化外包团队,北京seo优化外包公司专业十年北京seo优化外包团队、北京seo教程、seo优化、网站优化服务、网站运营外包'>"
+    +"<body> <link rel='stylesheet' type='text/css' href='./css.css?v=201806'/>"
+    +"<div class=content><div class='left' >" + htmlLeft + "</div><div class='right'>" + htmlArry2 + "</div></div>";
     fs.writeFile('./' + bigclass + dateTime + '.html', indexHtml, {
         'flag': 'a'
-    }, function(err) {
+    }, function (err) {
         if (err) {
             console.log(err);
         }
@@ -54,10 +57,10 @@ function productHtml() {
 }
 
 
-function crawler(url) {
+let crawler=(url)=> {
     console.log("-----------" + url + "-----------------");
-    var arcList = [];
-    agent.get(url).charset(utfCharset).end(function(err, res) {
+    let arcList = [];
+    agent.get(url).charset(utfCharset).end(function (err, res) {
         if (res) {
             arcList = filterHtml(res.text);
         } else {
@@ -66,40 +69,38 @@ function crawler(url) {
         }
 
     });
-    var dateTime2 = (new Date().getTime() - dateTime) / 1000;
+    let dateTime2 = (new Date().getTime() - dateTime) / 1000;
     console.log('## 编译完成，共耗时：' + dateTime2 + "秒，请耐心抓取完成");
 
 }
 crawler(url);
 
-function filterHtml(html) {
+let filterHtml=(html)=> {
 
-    var $ = cheerio.load(html);
-    var aPost = $(listTitle); //列表页面title
+    let $ = cheerio.load(html);
+    let aPost = $(listTitle); //列表页面title
 
-    aPost.each(function() {
-        var ele = $(this);
-        var title = ele.text(); //取list文章的title
-        var url = ele.attr("href"); //具体到打开文章的url
+    aPost.each(function () {
+        let ele = $(this);
+        let title = ele.text(); //取list文章的title
+        let url = ele.attr("href"); //具体到打开文章的url
         console.log(url + "-------------" + title); //输出文章列表        
-        agent.get(url).charset(utfCharset).end(function(err, res) {
+        agent.get(url).charset(utfCharset).end(function (err, res) {
 
             if (res) {
-             
-                var $ = res.text ? cheerio.load(res.text) : "";
-                var content = $(contentInfo).text(); //文章页面的内容必须是唯一的
-                content = content.replace(/<[^>]+>/g,"<br>");  //过滤掉所有的html标签
+
+                let $ = res.text ? cheerio.load(res.text) : "";
+                let content = $(contentInfo).text(); //文章页面的内容必须是唯一的
+                content = content.replace(/<[^>]+>/g, "<br>");  //过滤掉所有的html标签
                 content = content.replace(/(https?.*?\.(:?html\b)(?!\.))/g, '');  //过滤url 类似https://www.xminseo.com/14436.html
                 content = content.replace(/(https?.*?\.(:?cn\b|com\b|net\b|org\b|gov\b)(?!\.))/g, '');//过滤url 类似https://www.xminseo.com
                 content = content.replace(/当前位置：seo教程 »|SEO优化技术 »|大杂烩 »|本文地址：|最后编辑于： /g, "");
                 content = content.replace(/\n|\r|\t/g, "<br>");
-                content = content.replace(/(<br>){2,6}/g, "<br>");
+                content = content.replace(/(<br>){2,8}/g, "<br>");
                 content = content.split("来源：")[0]; //去掉来源
                 content = content.split("更多相关阅读推荐：")[0]; //更多相关阅读推荐
-                content = content.replace(/网贷ABC|嘉丰瑞德/g, "宜信财富");
-                
-                
-                
+                content = content.replace(/www.xminseo.com|嘉丰瑞德/g, "www.35ui.cn");
+
                 //console.log(content);
                 arcList.push({
                     title: title,
