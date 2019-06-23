@@ -9,20 +9,36 @@ var agent = require("superagent"); //gbk编码
 var fs = require('fs');
 var dateTime = new Date().getTime();
 //var url = "https://www.xminseo.com/page/";
-var url = "https://www.xminseo.com/category/seohexin/page/"; //seo技术
-var bigclass = "seo优化教程";
-var contentInfo = ".article-content"; // 内容页面必须是唯一的
-var listTitle = ".excerpt h2 a"; //列表页获取title
-
-var utfCharset = 'UTF-8'; //页面字符集
+var url = "http://blog.zhijin.com/news/"; //seo技术
+var bigclass = "自考";
+var contentInfo = ".pageCont"; // 内容页面必须是唯一的
+var listTitle = ".wrap .word a"; //列表页获取title
+var utfCharset = 'utf-8'; //页面字符集
 var arcList = [];
 charset(agent); //
-var i = 2,
-curPage = 40;
+var i = 1,
+curPage = 4;
+
+let crawler=(url)=> {
+    console.log("-----------" + url + "-----------------");
+    let arcList = [];
+    agent.get(url).charset(utfCharset).end(function (err, res) {
+        if (res) {
+            arcList = filterHtml(res.text);
+        } else {
+            console.log(err);
+            productHtml();
+        }
+
+    });
+    let dateTime2 = (new Date().getTime() - dateTime) / 1000;
+    console.log('## 编译完成，共耗时：' + dateTime2 + "秒，请耐心抓取完成");
+
+}
 
 let nextPage=()=> {
     if (curPage >= i) {
-        let nextUrl = url + i; //页码
+        let nextUrl = url + i+"/"; //页码
         ++i;
         crawler(nextUrl);
         console.log(nextUrl);
@@ -30,6 +46,7 @@ let nextPage=()=> {
         productHtml();
     }
 }
+nextPage();
 
 let productHtml=()=> {
     let htmlArry2 = arcList.map((item, key) => {
@@ -57,42 +74,26 @@ let productHtml=()=> {
 }
 
 
-let crawler=(url)=> {
-    console.log("-----------" + url + "-----------------");
-    let arcList = [];
-    agent.get(url).charset(utfCharset).end(function (err, res) {
-        if (res) {
-            arcList = filterHtml(res.text);
-        } else {
-            console.log(err);
-            productHtml();
-        }
 
-    });
-    let dateTime2 = (new Date().getTime() - dateTime) / 1000;
-    console.log('## 编译完成，共耗时：' + dateTime2 + "秒，请耐心抓取完成");
-
-}
-crawler(url);
 
 let filterHtml=(html)=> {
 
     let $ = cheerio.load(html);
-    let aPost = $(listTitle); //列表页面title
-
+    let aPost = $(listTitle).eq(0); //列表页面title
+    console.log(aPost.length);
     aPost.each(function () {
         let ele = $(this);
         let title = ele.text(); //取list文章的title
         let url = ele.attr("href"); //具体到打开文章的url
         console.log(url + "-------------" + title); //输出文章列表        
         agent.get(url).charset(utfCharset).end(function (err, res) {
-
+           // console.log(res);       
             if (res) {
 
                 let $ = res.text ? cheerio.load(res.text) : "";
                 let content = $(contentInfo).text(); //文章页面的内容必须是唯一的
-                let contentcc=$(".wb-excerpt").text();//匹配相同的内容过滤掉
-                content = content.replace(contentcc, "www.35ui.cn");
+                // let contentcc=$(".wb-excerpt").text();//匹配相同的内容过滤掉
+                // content = content.replace(contentcc, "www.35ui.cn");
                 content = content.replace(/<[^>]+>/g, "<br>");  //过滤掉所有的html标签
                 content = content.replace(/(https?.*?\.(:?html\b)(?!\.))/g, '');  //过滤url 类似https://www.xminseo.com/14436.html
                 content = content.replace(/(https?.*?\.(:?cn\b|com\b|net\b|org\b|gov\b)(?!\.))/g, '');//过滤url 类似https://www.xminseo.com
@@ -115,11 +116,11 @@ let filterHtml=(html)=> {
                 console.log(err);
                 productHtml();
             };
-
+            
         });
 
     });
-    nextPage();
-
+    
+    nextPage(); 
     return arcList;
 }
