@@ -1,22 +1,32 @@
 # seoRobot
 自定义文章采集器,Custom article collector
 
-##### 使用规则说明
+## 使用规则说明
 
-###### 终端运行 
+确保本机已安装nodejs,如没有点击安装[安装node](http://nodejs.cn/ "百度一下")
+
+### 安装 
+
+>>npm install
+
+
+### 终端运行 
 
 >>node  xiaoshoujiqiao
 
 
-###### 正则过滤规则
+### 正则过滤规则
 ```
 content.replace(/(https?.*?\.(:?html\b)(?!\.))/g, '');  //过滤url 类似https://www.35ui.cn/14436.html
+
 content.replace(/(https?.*?\.(:?cn\b|com\b|net\b|org\b|gov\b)(?!\.))/g, '');//过滤url 类似https://www.35ui.cn
-content.replace(/(<br>){2,6}/g, "<br>");  //替换多个<br>
+
+content.replace(/(<br>){2,6}/g, "<br>"); 
+ //替换多个<br>
 content.replace(/<[^>]+>/g,"<br>");  //过滤掉所有的html标签
 ```
 
-###### 生成文本文件
+### 生成文本文件
 
 
 ```
@@ -35,7 +45,7 @@ content.replace(/<[^>]+>/g,"<br>");  //过滤掉所有的html标签
 
     return false;
 ```
-###### 生成html文件
+### 生成html文件
 ```
  let htmlArry2 = arcList.map((item,key) => {
         return 'NO.第'+key + '<br>' + item.title + '<br>' + item.content + '<br><br>';
